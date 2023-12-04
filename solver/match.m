@@ -5,7 +5,7 @@ distance_threshold = 15;
 angle_threshold = 30;
 
 %% True matching
-max_score = 0;
+max_score = -inf;
 for i = 1:size(minutiae_1, 1)
     for j = 1:size(minutiae_2, 1)
         score = 0;
@@ -38,6 +38,13 @@ for i = 1:size(minutiae_1, 1)
                 end
             end
         end
+        % update matching score
+        % introduce penalty for unmatched minutiae and rotation
+        penalty_unmatched_minutiae = 0.1;
+        score = score - penalty_unmatched_minutiae * (size(minutiae_1, 1) - sum(is_matched_1_1)) - penalty_unmatched_minutiae * (size(minutiae_2, 1) - sum(is_matched_1_2));
+        penalty_rotation = 0.1;
+        penalty_translation = 0.05;
+        score = score - penalty_rotation * abs(dtheta) - penalty_translation * (abs(dx) + abs(dy));
         % Update maximum score
         if score > max_score
             max_score = score;

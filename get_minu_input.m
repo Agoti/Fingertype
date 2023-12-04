@@ -24,13 +24,13 @@ function get_minu_input(image_idx, config)
     bridge_length = config.bridge_length;
     bridge_d = config.bridge_d;
     % Debug flag
-    debug = false;
+    debug = config.debug_input;
 
     %% Image enhancement
 [enhanced_image, background] = enhance(image, ...
     block_size, extended_size, threshold, d, mask, ...
     smooth_filter_size, smooth_filter_sigma, ...
-    gabor_filter_size, gabor_filter_sigma);
+    gabor_filter_size, gabor_filter_sigma, config.debug_enhance);
 
 %% Get minutiae
 [end_i, end_j, end_direction, bridge_i, bridge_j, bridge_direction, thin_image] = ...

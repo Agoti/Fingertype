@@ -4,10 +4,10 @@
 function [enhanced_image, background] = enhance(image, ...
     block_size, extended_size, threshold, d, mask, ...
     smooth_filter_size, smooth_filter_sigma, ...
-    gabor_filter_size, gabor_filter_sigma)
+    gabor_filter_size, gabor_filter_sigma, debug)
 
 %% parameters
-debug1 = 0;
+debug1 = debug;
 [height, width] = size(image);
 
 %% get magnitude, period and direction locally

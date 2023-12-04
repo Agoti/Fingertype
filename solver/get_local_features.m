@@ -89,19 +89,19 @@ end
 ROI = magnitude > threshold;
 
 % deal with the border
-nblock_padmargin = ceil((extended_size - block_size) / 2 / block_size + 1);
+% nblock_padmargin = ceil((extended_size - block_size) / 2 / block_size + 1);
 
-for i = 1:num_block_height
-    for j = 1:num_block_width
-        if ROI(i, j) == 1
-            if (i <= nblock_padmargin || i > num_block_height - nblock_padmargin || ...
-                    j <= nblock_padmargin || j > num_block_width - nblock_padmargin) ...
-                    && (abs(direction(i, j)) < 1e-6 || abs(abs(direction(i, j)) - 90) < 1e-6)
-                ROI(i, j) = 0;
-            end
-        end
-    end
-end
+% for i = 1:num_block_height
+%     for j = 1:num_block_width
+%         if ROI(i, j) == 1
+%             if (i <= nblock_padmargin || i > num_block_height - nblock_padmargin || ...
+%                     j <= nblock_padmargin || j > num_block_width - nblock_padmargin) ...
+%                     && (abs(direction(i, j)) < 1e-6 || abs(abs(direction(i, j)) - 90) < 1e-6)
+%                 ROI(i, j) = 0;
+%             end
+%         end
+%     end
+% end
 
 
 end
