@@ -63,45 +63,6 @@ for i = 1:num_block_height
     end
 end
 
-% has-fingerprint mask
-% if mask{1} == "knn"
-%     load('data2.mat');
-%     label = data2(:, 4);
-%     data = data2(:, 1:3);
-%     knnClassifier = fitcknn(data, label, 'NumNeighbors', 1);
-% 
-%     % predict ROI
-%     ROI = zeros(num_block_height, num_block_width);
-%     for i = 1:num_block_height
-%         for j = 1:num_block_width
-%             subimage = padded_image((i - 1) * block_size + (1:extended_size), ...
-%                 (j - 1) * block_size + (1:extended_size));
-%             ROI(i, j) = predict(knnClassifier, [magnitude(i, j), frequency(i, j) * extended_size, var(subimage(:))]);
-%         end
-%     end
-% elseif mask{1} == "gauss" || mask{1} == "guass_freq"
-%     ROI_magnitude = magnitude .* ...
-%         generate_gauss(num_block_width, num_block_height, mask{2});
-%     ROI = ROI_magnitude > threshold;
-% else
-%     ROI = magnitude > threshold;
-% end
 ROI = magnitude > threshold;
-
-% deal with the border
-% nblock_padmargin = ceil((extended_size - block_size) / 2 / block_size + 1);
-
-% for i = 1:num_block_height
-%     for j = 1:num_block_width
-%         if ROI(i, j) == 1
-%             if (i <= nblock_padmargin || i > num_block_height - nblock_padmargin || ...
-%                     j <= nblock_padmargin || j > num_block_width - nblock_padmargin) ...
-%                     && (abs(direction(i, j)) < 1e-6 || abs(abs(direction(i, j)) - 90) < 1e-6)
-%                 ROI(i, j) = 0;
-%             end
-%         end
-%     end
-% end
-
 
 end

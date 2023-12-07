@@ -6,6 +6,9 @@ function get_minu_input(image_idx, config)
     image = im2double(image);
     image = im2gray(image);
 
+    % Normalize image
+    image = (image - min(image(:))) / (max(image(:)) - min(image(:)));
+
     % retrieve parameters from config
     block_size = config.block_size;
     extended_size = config.extended_size;
@@ -42,15 +45,17 @@ function get_minu_input(image_idx, config)
 % minutiae = 
 % end_i & end_j & end_direction \\
 % bridge_i & bridge_j & bridge_direction
-minutiae = [end_i, end_j, end_direction; ...
-    bridge_i, bridge_j, bridge_direction];
+minutiae = [end_j, end_i, end_direction; ...
+    bridge_j, bridge_i, bridge_direction];
 
 %% Debug
 if debug
     figure;
-    subplot(1, 2, 1);
+    subplot(1, 3, 1);
+    imshow(image);
+    subplot(1, 3, 2);
     imshow(enhanced_image);
-    subplot(1, 2, 2);
+    subplot(1, 3, 3);
     imshow(thin_image);
     DrawMinu(gcf, minutiae, 'r');
     saveas(gcf, ['result/process/input/', image_idx, '.png']);

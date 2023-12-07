@@ -2,15 +2,8 @@
 function register(image_idx, config)
 
 %% Read image
-% image_idx \in {a, b, ..., z, space}
-% read 'image/regist/*_{image_idx}.bmp', * stand for any number
 regist_folder = 'image/regist/';
-image_name_regexp = fullfile(regist_folder, ['*_', image_idx, '.bmp']);
-files = dir(image_name_regexp);
-if isempty(files)
-    error('No image found');
-end
-image_name = fullfile(regist_folder, files(1).name);
+image_name = [regist_folder, image_idx, '.bmp'];
 image = imread(image_name);
 image = im2double(image);
 image = im2gray(image);
