@@ -2,7 +2,7 @@ function get_minu_input(image_idx, config)
 
     %% Load data
     image_dir = "image/input/";
-    image = imread(image_dir + image_idx + ".bmp");
+    image = imread(image_dir + image_idx + config.file_type);
     image = im2double(image);
     image = im2gray(image);
 

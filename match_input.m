@@ -11,7 +11,7 @@ function result = match_input(image_idx, config_2)
         % Remove ".mat"
         file_name = file_name(1:end-4);
         load(register_dir + file_name + ".mat");
-        image_register = imread(register_img_dir + "/" + file_name + ".bmp");
+        image_register = imread(register_img_dir + "/" + file_name + config_2.file_type);
         register_list{i} = struct('name', file_name, 'minutiae', minutiae, 'image', image_register);
     end
 
@@ -20,7 +20,7 @@ function result = match_input(image_idx, config_2)
     load(input_dir + image_idx + ".mat");
     minutiae_input = minutiae;
     input_img_dir = "image/input";
-    image_input = imread(input_img_dir + "/" + image_idx + ".bmp");
+    image_input = imread(input_img_dir + "/" + image_idx + config_2.file_type);
 
     % Debug flag
     debug = config_2.debug_matchinput;

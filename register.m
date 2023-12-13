@@ -3,7 +3,7 @@ function register(image_idx, config)
 
 %% Read image
 regist_folder = 'image/regist/';
-image_name = [regist_folder, image_idx, '.bmp'];
+image_name = [regist_folder, image_idx, config.file_type];
 image = imread(image_name);
 image = im2double(image);
 image = im2gray(image);
