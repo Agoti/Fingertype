@@ -1,10 +1,13 @@
 function [matching_score, A, B, matched_pts1, matched_pts2] ...
-    = match(minutiae_1, minutiae_2, config_2)
+    = match(minutiae_1, minutiae_2, config)
 
 %% Parameters
-distance_threshold = 15;
-angle_threshold = 30;
-debug = config_2.debug_match;
+dist_threshold = config.dist_threshold;
+angle_threshold = config.angle_threshold;
+penalty_translation = config.translation_penalty;
+penalty_rotation = config.rotation_penalty;
+penalty_unmatched_minutiae = config.unmatched_penalty;
+debug = config.debug_match;
 
 max_score = -inf;
 for i = 1:size(minutiae_1, 1)
@@ -28,7 +31,7 @@ for i = 1:size(minutiae_1, 1)
         % Matching score = number of matched minutiae
         for k = 1:size(minutiae_1, 1)
             for l = 1:size(minutiae_2_transformed, 1)
-                if norm(minutiae_1(k, 1:2) - minutiae_2_transformed(l, 1:2)) < distance_threshold ...
+                if norm(minutiae_1(k, 1:2) - minutiae_2_transformed(l, 1:2)) < dist_threshold ...
                     && abs(minutiae_1(k, 3) - minutiae_2_transformed(l, 3)) < angle_threshold ...
                     && is_matched_1(k) == 0 && is_matched_2(l) == 0
                     score = score + 1;
@@ -40,11 +43,8 @@ for i = 1:size(minutiae_1, 1)
             end
         end
         % update matching score
-        % introduce penalty for unmatched minutiae and rotation
-        penalty_unmatched_minutiae = 0.0;
+        % incur penalty for unmatched minutiae and affine transformation
         score = score - penalty_unmatched_minutiae * (size(minutiae_1, 1) - sum(is_matched_1)) - penalty_unmatched_minutiae * (size(minutiae_2, 1) - sum(is_matched_2));
-        penalty_rotation = 0;
-        penalty_translation = 0.0;
         score = score - penalty_rotation * abs(dtheta) - penalty_translation * (abs(dx) + abs(dy));
         % Update maximum score
         if score > max_score

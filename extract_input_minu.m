@@ -1,16 +1,16 @@
-%% Function to register fingerprint images
-function register(image_idx, config)
+function minutiae = extract_input_minu(image, config, varargin)
 
-%% Read image
-regist_folder = 'image/regist/';
-image_name = [regist_folder, image_idx, config.file_type];
-image = imread(image_name);
+if nargin == 3
+    key = varargin{1};
+else
+    key = 'none';
+end
+
+% Normalize image
 image = im2double(image);
 image = im2gray(image);
-% Normalize image
 image = (image - min(image(:))) / (max(image(:)) - min(image(:)));
 
-%% Parameters
 % retrieve parameters from config
 block_size = config.block_size;
 extended_size = config.extended_size;
@@ -29,15 +29,13 @@ remove_margin_length = config.remove_margin_length;
 bridge_length = config.bridge_length;
 bridge_d = config.bridge_d;
 % Debug flag
-debug = config.debug_register;
+debug = config.debug_input;
 
-%% Image enhancement
+    %% Image enhancement
 [enhanced_image, background] = enhance(image, ...
     block_size, extended_size, threshold, d, mask, ...
     smooth_filter_size, smooth_filter_sigma, ...
     gabor_filter_size, gabor_filter_sigma, config.debug_enhance);
-% enhanced_image = image;
-% background = zeros(size(image));
 
 %% Get minutiae
 [end_i, end_j, end_direction, bridge_i, bridge_j, bridge_direction, thin_image] = ...
@@ -62,10 +60,10 @@ if debug
     subplot(1, 3, 3);
     imshow(thin_image);
     DrawMinu(gcf, minutiae, 'r');
-    saveas(gcf, ['result/process/register/', image_idx, '.png']);
+    saveas(gcf, ['result/process/input/', key, '.png']);
 end
 
-%% Save minutiae
-save(['result/register/', image_idx, '.mat'], 'minutiae');
+% Save result
+save(['result/input/', key, '.mat'], 'minutiae');
 
 end
