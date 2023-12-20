@@ -34,7 +34,7 @@ function result = match_input(config_1, config_2)
         tic;
         name = input_files(i).name;
         % Remove ".png"
-        key = file_name(1:end-4);
+        key = name(1:end-4);
         image_input = imread([input_image_folder, name]);
         % Extract minutiae of input image
         minutiae_input = extract_input_minu(image_input, config_1, key);
@@ -97,7 +97,7 @@ function result = match_input(config_1, config_2)
                 % Plot the matched points and minutiae
                 figure;
                 showMatchedFeatures(image_input, image_register, matched_pts1, matched_pts2, 'montage');
-                saveas(gcf, "result/match/" + register.key + "_" + j + "_" + top_N_matches(j).key(3:end) + "_matchpoints.png");
+                saveas(gcf, "result/match/" + i + "_" + top_N_matches(j).key(3:end) + "_matched.png");
                 tform = affine2d([A, B; 0, 0, 1]');
                 minutiae_register(:, 1:2) = transformPointsForward(tform, minutiae_register(:, 1:2));
                 minutiae_register(:, 3) = minutiae_register(:, 3) + acos(A(1, 1));
@@ -106,7 +106,7 @@ function result = match_input(config_1, config_2)
                 imshow(background);
                 DrawMinu(gcf, minutiae_input, 'r');
                 DrawMinu(gcf, minutiae_register, 'b');
-                saveas(gcf, "result/match/" + register.key + "_" + j + "_" + top_N_matches(j).key(3:end) + "_minutiae.png");
+                saveas(gcf, "result/match/" + i + "_" + top_N_matches(j).key(3:end) + "_minutiae.png");
             end
         end
     end

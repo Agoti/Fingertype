@@ -59,6 +59,7 @@ for i = 1:length(image_file_list)
     %% Debug
     if debug
         figure;
+        set(gcf, 'Position', [100, 100, 1200, 400]);
         subplot(1, 3, 1);
         imshow(image);
         subplot(1, 3, 2);

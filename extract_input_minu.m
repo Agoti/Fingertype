@@ -53,6 +53,7 @@ minutiae = [end_j, end_i, end_direction; ...
 %% Debug
 if debug
     figure;
+    set(gcf, 'Position', [0, 0, 1200, 400]);
     subplot(1, 3, 1);
     imshow(image);
     subplot(1, 3, 2);

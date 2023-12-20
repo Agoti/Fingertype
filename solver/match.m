@@ -45,7 +45,7 @@ for i = 1:size(minutiae_1, 1)
         % update matching score
         % incur penalty for unmatched minutiae and affine transformation
         score = score - penalty_unmatched_minutiae * (size(minutiae_1, 1) - sum(is_matched_1)) - penalty_unmatched_minutiae * (size(minutiae_2, 1) - sum(is_matched_2));
-        score = score - penalty_rotation * abs(dtheta) - penalty_translation * (abs(dx) + abs(dy));
+        score = score - penalty_rotation * abs(dtheta) * 180 / pi - penalty_translation * (abs(dx) + abs(dy));
         % Update maximum score
         if score > max_score
             max_score = score;
