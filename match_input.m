@@ -1,4 +1,4 @@
-function result = match_input(config_1, config_2)
+function [result, time_match_total] = match_input(config_1, config_2)
 
     %% Load config
     regist_image_folder = config_2.regist_image_folder;
@@ -29,6 +29,7 @@ function result = match_input(config_1, config_2)
     % Put "10.png" at the end of the list
     input_files = input_files([1, 3, 4, 5, 6, 7, 8, 9, 10, 2]);
     result = "";
+    time_match_total = 0;
     for i = 1:length(input_files)
         disp("Matching " + input_files(i).name + "...");
         tic;
@@ -74,6 +75,7 @@ function result = match_input(config_1, config_2)
         time_match = toc;
         disp("Result: " + res + " (" + time_match + "s)");
         result = result + res;
+        time_match_total = time_match_total + time_match;
 
         % Show top N matches(only for debug)
         if debug

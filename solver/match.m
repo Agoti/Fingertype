@@ -2,6 +2,7 @@ function [matching_score, A, B, matched_pts1, matched_pts2] ...
     = match(minutiae_1, minutiae_2, config)
 
 %% Parameters
+% Retrieve parameters from config
 dist_threshold = config.dist_threshold;
 angle_threshold = config.angle_threshold;
 penalty_translation = config.translation_penalty;
@@ -9,6 +10,7 @@ penalty_rotation = config.rotation_penalty;
 penalty_unmatched_minutiae = config.unmatched_penalty;
 debug = config.debug_match;
 
+% Iterative matching
 max_score = -inf;
 for i = 1:size(minutiae_1, 1)
     for j = 1:size(minutiae_2, 1)
@@ -57,13 +59,14 @@ for i = 1:size(minutiae_1, 1)
     end
 end
 
+% Return result
 matching_score = max_score;
 A = max_A;
 B = max_B;
 matched_pts1 = max_matched_1;
 matched_pts2 = max_matched_2;
     
-% Show matching result amd compare with ground truth
+%% Debug: Show matching result amd compare with ground truth
 if debug
     disp(['Matching score: ', num2str(max_score)]);
     disp(['Affine transformation: theta = ', num2str(acos(max_A(1, 1)) * 180 / pi), ', dx = ', num2str(max_B(1)), ', dy = ', num2str(max_B(2))]);

@@ -7,8 +7,13 @@ addpath('solver');
 %% Parameters
 % controls
 file_type = '.png';
-do_register = false;
+use_python_matching = true; % whether to use the python matching algorithm
+interpreter_path = 'C:/Users/hw/.conda/envs/Matlab/python.exe'; % the path of the python interpreter
+do_register = true;
 do_match = true;
+if use_python_matching
+    pyenv('Version', interpreter_path);
+end
 
 % config_1: the configuration for minutiae extraction
 config_1 = struct(...
@@ -23,7 +28,7 @@ config_1 = struct(...
     'regist_folder', 'image/regist/', ... % the folder to save the enhanced images
     'input_folder', 'image/input/', ... % the folder to save the input images
     'debug_enhance', false, ... % whether to show the enhanced images
-    'debug_register', true, ... % whether to show the registered images
+    'debug_register', false, ... % whether to show the registered images
     'debug_input', false, ... % whether to show the input images
     'file_type', file_type ... % the type of the image files
 );
@@ -40,7 +45,7 @@ config_2 = struct( ...
     'regist_minu_folder', 'result/register/', ... % paths
     'input_minu_folder', 'result/input/', ...
     'debug_match', false, ...
-    'debug_matchinput', true, ...
+    'debug_matchinput', false, ...
     'debug_matchinput_showtopN', 5, ...
     'debug_display_figure', false, ... % debug flags
     'file_type', file_type ...
@@ -59,10 +64,29 @@ close all;
 
 %% Matching input fingerprints
 if do_match
-    disp('Matching input fingerprints...');
-    result = match_input(config_1, config_2);
-    disp(['Fingerprint matching finished.']);
-    disp(['Result: ', result]);
+    if ~use_python_matching
+        disp('Matching input fingerprints...');
+        [result, time_match] = match_input(config_1, config_2);
+        disp(['Fingerprint matching finished in ' num2str(time_match) 's.']);
+        disp(['Result: ', result]);
+    else
+        tic;
+        input_files = dir([config_2.input_image_folder '*' config_2.file_type]);
+        for i = 1 : length(input_files)
+            image = imread([config_2.input_image_folder input_files(i).name]);
+            key = input_files(i).name(1 : end - length(config_2.file_type));
+            minutiae = extract_input_minu(image, config_1, key);
+        end
+        mat2txt();
+        if count(py.sys.path, '') == 0
+            insert(py.sys.path, int32(0), '');
+        end
+        py.importlib.import_module('match_python');
+        py.match_python.matching();
+        time_match = toc;
+        disp(['Fingerprint matching finished in ' num2str(time_match) 's.']);
+        % status = system('python match_python.py');
+    end
 end
 
 close all;
