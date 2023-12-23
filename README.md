@@ -4,12 +4,12 @@
 数字图像处理课程大作业. 
 我们选择了第三个题目: 指纹打字.
 队员: 刘鸣霄(Liu, Monster Kid), 费昕(Fei, Barry)
-Email: mx-liu21@mails.tsinghua.edu.cn
+Contact: mx-liu21@mails.tsinghua.edu.cn
 
 ## 项目结构
 
 - `image/`: 存放指纹图片
-- `result/`: 存放中间结果
+- `result/`: 存放中间结果, 如特征点mat文件，txt文件和可视化图片
 - `solver/`: 四个主要算法: 特征图, 增强, 细节点提取, 指纹匹配
 - `utils/`: 一些工具函数
 - `main.m`: 主程序: 从这里运行
