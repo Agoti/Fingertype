@@ -1,4 +1,7 @@
 #!/bin/bash
+# Shell script to reset the result folder
+# Code by Monster Kid
+
 reset(){
     echo "Resetting..."
     rm -rf result/*

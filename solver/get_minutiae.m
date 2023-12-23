@@ -17,6 +17,10 @@
 %   branch_i: the row index of the branch points
 %   branch_j: the column index of the branch points
 %   branch_points_direction: the direction of the branch points
+% By Monster Kid
+% NOTE: the comments for utility functions are not 
+%       clear enough, but its usage is easy to understand
+
 function [end_i, end_j, end_points_direction, branch_i,...
      branch_j, branch_points_direction, thin_image] = get_minutiae(image, background, ...
      binarize_sensitivity, small_object_size, small_branch_size, ...
@@ -118,6 +122,7 @@ for i = 1:length(branch_i)
     branch_points_direction(i) = direction;
 end
 
+% Convert the direction to degree
 end_points_direction = end_points_direction * 180 / pi;
 branch_points_direction = branch_points_direction * 180 / pi;
 

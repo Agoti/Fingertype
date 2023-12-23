@@ -1,3 +1,6 @@
+%% THESE CODES ARE NOT USED IN THE FINAL VERSION -- Monster Kid
+%  Skip this file
+
 function [matching_score, A, B, matched_pts1, matched_pts2] ...
     = match(minutiae_1, minutiae_2, config)
 

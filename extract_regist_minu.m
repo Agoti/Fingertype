@@ -1,4 +1,6 @@
-%% Function to register fingerprint images
+% Function to register fingerprint images
+% code by Monster Kid
+
 function extract_regist_minu(config)
     
 %% Parameters
@@ -24,6 +26,7 @@ debug = config.debug_register;
 % Folder to store registered image
 regist_folder = config.regist_folder;
 
+%% Extract minutiae from every registered image
 image_file_list = dir([regist_folder, '*', config.file_type]);
 for i = 1:length(image_file_list)
     % Read image
@@ -40,8 +43,6 @@ for i = 1:length(image_file_list)
         block_size, extended_size, threshold, d, mask, ...
         smooth_filter_size, smooth_filter_sigma, ...
         gabor_filter_size, gabor_filter_sigma, config.debug_enhance);
-    % enhanced_image = image;
-    % background = zeros(size(image));
 
     %% Get minutiae
     [end_i, end_j, end_direction, bridge_i, bridge_j, bridge_direction, thin_image] = ...
@@ -50,13 +51,10 @@ for i = 1:length(image_file_list)
         bridge_length, bridge_d);
 
     %% Concatenate minutiae
-    % minutiae = 
-    % end_i & end_j & end_direction \\
-    % bridge_i & bridge_j & bridge_direction
     minutiae = [end_j, end_i, end_direction; ...
         bridge_j, bridge_i, bridge_direction];
 
-    %% Debug
+    %% Debug: show enhanced image and minutiae
     if debug
         figure;
         set(gcf, 'Position', [100, 100, 1200, 400]);

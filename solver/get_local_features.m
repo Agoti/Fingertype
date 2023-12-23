@@ -1,7 +1,22 @@
+% Function to compute the local features of an fingerprint image.
+% Input:
+%   image: the input image
+%   block_size: the size of the block
+%   extended_size: the size of the extended block
+%   threshold: the threshold to determine whether a block is a ROI
+%   d: the size of the center region to be removed
+%   mask: the mask used to determine the ROI
+% Output:
+%   magnitude: the magnitude figure(blockwise)
+%   direction: the direction figure(blockwise)
+%   frequency: the frequency figure(blockwise)
+%   ROI: the ROI mask(blockwise)
+% Code by Monster Kid
+
 function [magnitude, direction, frequency, ROI] = get_local_features(image, ...
     block_size, extended_size, threshold, d, varargin)
 
-%% parameter check
+%% parameter check: mask
 if nargin == 5
     mask = 0;
 else
@@ -50,7 +65,8 @@ for i = 1:num_block_height
         [max_row, max_col] = ind2sub(size(magnitude_fft), max_index);
         magnitude(i, j) = max_magnitude;
 
-        % calculate direction and period;
+        % calculate direction and period
+        % the angle is in the range of [-90, 90] degrees
         angle = atan2(max_col - center, max_row - center) * 180 / pi;
         if angle > 90
             angle = angle - 180;
@@ -63,6 +79,7 @@ for i = 1:num_block_height
     end
 end
 
+% Region of Interest(Region of Foreground)
 ROI = magnitude > threshold;
 
 end

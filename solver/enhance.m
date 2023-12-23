@@ -1,4 +1,13 @@
 % FingerPrint Enhancement
+% Input:
+%   image: the input image
+%   block_size, extended_size, threshold, d, mask: parameters for get_local_features
+%   smooth_filter_size, smooth_filter_sigma: parameters for smoothing
+%   gabor_filter_size, gabor_filter_sigma: parameters for gabor filter
+%   debug: whether to display debug information
+% Output:
+%   enhanced_image: the enhanced image
+%   background: a binary image, 1 for background, 0 for fingerprint
 % By: Monster Kid
 
 function [enhanced_image, background] = enhance(image, ...
@@ -14,7 +23,7 @@ debug1 = debug;
 [magnitude, direction, frequency, ROI] = ...
     get_local_features(image, block_size, extended_size, threshold, d, mask);
 
-% %% debug: display magnitude, period and direction
+%% debug: display magnitude, period and direction
 if debug1
     figure;
     subplot(2, 2, 1);
@@ -32,16 +41,12 @@ if debug1
     title('ROI');
 end
 
-
 %% filter and smooth
-
 % get guass filter
 guass = generate_gauss(smooth_filter_size, smooth_filter_size, smooth_filter_sigma);
 guass = guass / sum(guass(:));
-
 % filter frequency
 frequency = imfilter(frequency, guass, 'replicate', 'same', 'conv');
-
 % smooth direction
 direction = direction / 180 * pi * 2;
 direction_cos = cos(direction);
@@ -50,7 +55,7 @@ direction_cos = imfilter(direction_cos, guass, 'replicate', 'same', 'conv');
 direction_sin = imfilter(direction_sin, guass, 'replicate', 'same', 'conv');
 direction = atan2(direction_sin, direction_cos) / 2 / pi * 180;
 
-% %% debug: display filtered period and direction
+%% debug: display filtered period and direction
 if debug1
     figure;
     subplot(2, 2, 1);
@@ -91,27 +96,25 @@ for i = 1:num_block_height
         row_range_original = (i - 1) * block_size + (1:block_size);
         col_range_original = (j - 1) * block_size + (1:block_size);
         subimage = padded_image(row_range, col_range);
-
-        % get background
         % if the local region does not contain fingerprint, skip
         if ROI(i, j) == 0
             background(row_range_original, col_range_original) = true;
             continue;
         end
-
         % get gabor filter
         gabor = generate_gabor(gabor_filter_size, gabor_filter_size, gabor_filter_sigma, 90-direction(i, j), frequency(i, j), 90);
-
         % filter subimage
         subimage_filtered = imfilter(subimage, gabor, 'replicate', 'same', 'conv');
-
         % save filtered local region
         enhanced_image(row_range_original, col_range_original) = subimage_filtered(margin + 1:margin + block_size, margin + 1:margin + block_size);
     end
 end
 
+%% Return enhanced image and background
+% Crop the enhanced image and background to the original size
 enhanced_image = enhanced_image(1:height, 1:width);
 background = background(1:height, 1:width);
+% Truncate the enhanced image to [0, 1]
 enhanced_image(find(enhanced_image < 0)) = 0;
 enhanced_image(find(enhanced_image > 1)) = 1;
 

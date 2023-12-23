@@ -1,5 +1,10 @@
+% Function to extract minutiae from input image
+% Code by Monster Kid
+
 function minutiae = extract_input_minu(image, config, varargin)
 
+%% Preprocess
+% The key of the image, used to save result
 if nargin == 3
     key = varargin{1};
 else
@@ -11,7 +16,7 @@ image = im2double(image);
 image = im2gray(image);
 image = (image - min(image(:))) / (max(image(:)) - min(image(:)));
 
-% retrieve parameters from config
+%% retrieve parameters from config
 block_size = config.block_size;
 extended_size = config.extended_size;
 threshold = config.threshold;
@@ -31,7 +36,7 @@ bridge_d = config.bridge_d;
 % Debug flag
 debug = config.debug_input;
 
-    %% Image enhancement
+%% Image enhancement
 [enhanced_image, background] = enhance(image, ...
     block_size, extended_size, threshold, d, mask, ...
     smooth_filter_size, smooth_filter_sigma, ...
@@ -64,7 +69,9 @@ if debug
     saveas(gcf, ['result/process/input/', key, '.png']);
 end
 
-% Save result
-save(['result/input/', key, '.mat'], 'minutiae');
+%% Save result
+if ~strcmp(key, 'none')
+    save(['result/input/', key, '.mat'], 'minutiae');
+end
 
 end

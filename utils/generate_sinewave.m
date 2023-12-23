@@ -1,4 +1,5 @@
 %% generate 2D sine wave
+% By Monster Kid
 function output = generate_sinewave(height, width, angle, frequency, phase)
     angle = angle * pi / 180;
     phase = phase * pi / 180;

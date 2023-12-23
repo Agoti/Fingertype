@@ -1,3 +1,6 @@
+# Python minutiae matching algorithm
+# Code by Barry
+
 import os
 import time
 import numpy as np
